@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 /**
- * @submission : Nithin Bharathi 14-July-2023
+ * @submission : Nithin Bharathi 16-July-2023
  *
  *
  */
@@ -22,10 +22,7 @@ public class Problem {
 			char c[] = t.read().toCharArray();
 			ArrayList<Integer>red = new ArrayList<>();
 			ArrayList<Integer>blue = new ArrayList<>();
-			for(int i = 0;i<n;i++){
-				if(c[i] == 'B')blue.add(a[i]);
-				else red.add(a[i]);
-			}
+			for(int i = 0;i<n;i++)(c[i] == 'B'?blue:red).add(a[i]);
 			Collections.sort(red);Collections.sort(blue);
 			int tar = n;
 			boolean ok = true;
