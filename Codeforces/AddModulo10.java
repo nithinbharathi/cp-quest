@@ -4,107 +4,46 @@ import java.util.stream.Collectors;
 import java.io.*;
 
 /**
- * @submission : Nithin Bharathi 7-Aug-2023
+ * @submission : Nithin Bharathi 06-Sept-2023
  *
  *
  */
 
-public class Problem {
-	static long MOD = 998244353;
-	static boolean vis[];
-	static int dp[][];
-
+public class Problem{
+	static int MOD = 998244353;
+	static long fact[];
 	public static void main(String[] args) throws Exception {
 		StringBuilder sb = new StringBuilder();
 		Template t = new Template();
 		int test = t.readInt();
-		LinkedHashSet<Integer>set[] = new LinkedHashSet[10];		
-		for(int i = 0;i<10;i++)set[i] = new LinkedHashSet<>();
-		for(int i = 0;i<10;i++){
-			int val = i;
-			int digit = val%10;
-			while(!set[i].contains(digit)){
-				if(digit%2 == 0)set[i].add(digit);
-				val+=(digit);	
-				digit = val%10;
-			}
-		}
-		while(test-->0){
+		while(test-->0) {
 			int n = t.readInt();
-			ArrayList<Integer>possible = new ArrayList<>();
-			int a[] = new int[n];			
-			for(int i = 0;i<n;i++)a[i] = t.readInt();
-			int mx = Arrays.stream(a).max().getAsInt();
-			possible.add(mx);
-			for(int i = 0;i<10;i++){
-				 mx+=(mx%10);
-				 possible.add(mx);
-			}			
-			boolean ok = false;
-			for(long max:possible){
-				boolean found = true;
-				for(int i =0;i<n;i++){
-					int val = a[i]%10;
-					long sum = 0;
-					for(int j:set[val])sum+=j;
-					long diff = max-a[i];						
-					if(a[i]%2 == 1)diff-=(a[i]%10);
-					long cycle = sum == 0?0:diff/sum;
-					long rem = diff-(sum*cycle);
-					for(int j:set[val]){
-						if(rem <= 0)break;
-						 rem-=j;
+			int a[]  = new int[n];
+			for(int i =0;i<n;i++) a[i] = t.readInt();
+			HashSet<Integer> set = new HashSet<>();
+			for(int i = 0;i<n;i++) {
+				if(a[i]%10 == 5 || a[i]%10 == 0) {
+					a[i]+=(a[i]%10);
+					set.add(a[i]);
+				}else {
+					while(a[i]%10 != 2) {
+						a[i]+=(a[i]%10);
 					}
-					found &= (rem==0);				
+					set.add(a[i]%20);
 				}
-				
-				if(found)ok =true;
-			} 
-			sb.append(ok?"Yes\n":"No\n");		
+			}	
+			sb.append(set.size() == 1?"YES\n":"NO\n");
+
 		}
 		System.out.println(sb);
- 
 	}
 
-	public static int lsearch(ArrayList<Integer> li, int index) {
-		int l = 0, r = li.size() - 1;
-		int ind = -1;
-		while (l <= r) {
-			int mid = (l + r) / 2;
-			if (li.get(mid) > index) {
-				ind = mid;
-				r = mid - 1;
-			} else
-				l = mid + 1;
-
-		}
-		return ind;
-	}
-
-	public static int rsearch(ArrayList<Integer> li, int index) {
-		int l = 0, r = li.size() - 1;
-		int ind = -1;
-		while (l <= r) {
-			int mid = (l + r) / 2;
-			if (li.get(mid) < index) {
-				ind = mid;
-				l = mid + 1;
-			} else
-				r = mid - 1;
-
-		}
-		return ind;
-	}
 
 	static class Pair {
-		String a;
-		int x, sz, index;
-		long y;
-		boolean z;
+		int x,y;
 
-		public Pair(int index, int a, long y) {
-			this.index = index;
-			this.x = a;
+		public Pair(int x, int y) {
+			this.x = x;
 			this.y = y;
 		}
 
