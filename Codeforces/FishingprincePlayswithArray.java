@@ -29,26 +29,14 @@ public class Problem{
 			ArrayList<Pair>al = expand(a,k);
 			ArrayList<Pair> bl = expand(b,k);
 			boolean ok = false;
-			if(equal(al,bl))ok = true;
+			if(al.equals(bl))ok = true;
 			
 			sb.append(ok?"YES\n":"NO\n");
 
 		}
 		System.out.println(sb);
 	}
-	
-	public static boolean equal(ArrayList<Pair>al,ArrayList<Pair>bl) {
-		boolean ok = false;
-		
-		if(al.size() == bl.size()) {
-			ok = true;
-			for(int i = 0;i<al.size();i++) {
-				if(al.get(i).x != bl.get(i).x || al.get(i).y != bl.get(i).y )ok = false;
-			}
-		}
-		
-		return ok;
-	}
+
 	
 	public static ArrayList<Pair>expand(int a[],long k){
 		ArrayList<Pair>l = new ArrayList<>();
@@ -74,6 +62,14 @@ public class Problem{
 		public Pair(int x, long y) {
 			this.x = x;
 			this.y = y;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj == null)return false;
+			
+			Pair o = (Pair)(obj);
+			return this.x == o.x && this.y == o.y;
 		}
 
 	}
