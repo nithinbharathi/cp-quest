@@ -28,8 +28,6 @@ public class Problem{
 			sb.append(go(map)+"\n");
 		}
 		
-		
-		
 		System.out.println(sb);
 	}
 	public static long go(Map<Integer,Integer>map) {
