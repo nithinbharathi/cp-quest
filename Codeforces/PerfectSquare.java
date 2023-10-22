@@ -42,18 +42,6 @@ public class Problem{
 		return ok;
 	}
 	
-	public static void go(int a[], int l, int r) {
-		if(l<r) {
-			int mid = (l+r)>>1;
-			go(a,l,mid);
-			go(a,mid+1,r);
-			if(mid+1<a.length && a[mid]>a[mid+1]) {
-				swap(l,mid,mid+1,r,a);
-				swaps++;
-			}	
-		}
-
-	}
 	public static void swap(int l1, int r1, int l2, int r2, int a[]) {
 		int len = r1-l1+1;
 		for(int i =0;i<len;i++) {
