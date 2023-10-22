@@ -1,0 +1,225 @@
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.io.*;
+
+/**
+ * @submission : Nithin Bharathi 07-Oct-2023
+ *
+ *
+ */
+
+public class Problem{
+	static int MOD = 998244353;
+	static int swaps = 0;
+	public static void main(String[] args) throws Exception {
+		StringBuilder sb = new StringBuilder();
+		Template t = new Template();
+		int test = t.readInt();
+		while(test-->0) {
+			int n = t.readInt();
+			int a[] = new int[n];
+			for(int i = 0;i<n;i++)a[i] = t.readInt();
+			
+			HashMap<Long,Integer>map = new HashMap<>();
+			for(int i = 0;i<n;i++) {
+				 for(long j = 2;j*j<=a[i];j++) {
+					 int cnt =0;
+					 while(a[i]%j == 0) {
+						 a[i]/=j;cnt++;
+					 }
+					 map.put(j,map.getOrDefault(j,0)+cnt);
+				 }
+				 
+				 if(a[i]>1) map.put((long)a[i],map.getOrDefault((long)a[i],0)+1);
+
+			}
+			boolean ok = true;
+			for(int val:map.values())ok &= (val%n == 0);
+			sb.append(ok?"YES\n":"NO\n");
+		}
+ 
+		System.out.println(sb);
+	}
+	public static boolean isSorted(int a[]) {
+		boolean ok = true;
+		for(int i =0;i<a.length-1;i++)ok&=(a[i+1]-a[i] == 1);
+		return ok;
+	}
+	
+	public static void go(int a[], int l, int r) {
+		if(l<r) {
+			int mid = (l+r)>>1;
+			go(a,l,mid);
+			go(a,mid+1,r);
+			if(mid+1<a.length && a[mid]>a[mid+1]) {
+				swap(l,mid,mid+1,r,a);
+				swaps++;
+			}	
+		}
+
+	}
+	public static void swap(int l1, int r1, int l2, int r2, int a[]) {
+		int len = r1-l1+1;
+		for(int i =0;i<len;i++) {
+			int t = a[l1+i];
+			a[l1+i] = a[l2+i];
+			a[l2+i] = t;
+		}
+	}
+	static class Pair {
+		int x;
+		long y;
+
+		public Pair(int x, long y) {
+			this.x = x;
+			this.y = y;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if(obj == null)return false;
+
+			Pair o = (Pair)(obj);
+			return this.x == o.x && this.y == o.y;
+		}
+
+	}
+
+	static class Template {
+		private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		private StringTokenizer st;
+
+		public int last(int a[], int target) {
+			int ind = -1;
+			int l = 0, r = a.length - 1;
+			while (l <= r) {
+				int mid = (l + r) / 2;
+				if (a[mid] <= target) {
+					ind = mid;
+					l = mid + 1;
+				} else
+					r = mid - 1;
+			}
+			return ind;
+		}
+
+		public boolean isSorted(int a[]) {
+			for (int i = 0; i < a.length; i++) {
+				if (i + 1 < a.length && a[i] > a[i + 1])
+					return false;
+			}
+			return true;
+		}
+
+		public boolean isPrime(int n) {
+			for (int i = 2; i * i <= n; i++) {
+				if (n % i == 0)
+					return false;
+			}
+			return true;
+		}
+
+		public long factorial(int n) {
+			long fac = 1;
+			for (int i = 1; i <= n; i++)
+				fac *= i;
+			return fac;
+		}
+
+		public ArrayList<Integer> factors(int n) {
+			ArrayList<Integer> l = new ArrayList<>();
+			for (int i = 1; i * i <= n; i++) {
+				if (n % i == 0) {
+					l.add(i);
+					if (n / i != i)
+						l.add(n / i);
+				}
+
+			}
+			return l;
+		}
+
+		public void build(int seg[], int ind, int l, int r, int a[]) {
+			if (l == r) {
+				seg[ind] = a[l];
+				return;
+			}
+			int mid = (l + r) / 2;
+			build(seg, (2 * ind) + 1, l, mid, a);
+			build(seg, (2 * ind) + 2, mid + 1, r, a);
+			seg[ind] = Math.min(seg[(2 * ind) + 1], seg[(2 * ind) + 2]);
+		}
+
+		public long gcd(long a, long b) {
+			return b == 0 ? a : gcd(b, a % b);
+		}
+
+		public int gcd(int a, int b) {
+			return b == 0 ? a : gcd(b, a % b);
+		}
+
+		public void swap(int a[], int i, int j) {
+			int t = a[i];
+			a[i] = a[j];
+			a[j] = t;
+		}
+
+		public void swap(char a[], int i, int j) {
+			char t = a[i];
+			a[i] = a[j];
+			a[j] = t;
+		}
+
+		public void swap(ArrayList<Integer> l, int i, int j) {
+			int t = l.get(i);
+			l.set(i, l.get(j));
+			l.set(j, t);
+		}
+
+		public void sort(int arr[]) {
+			ArrayList<Integer> list = new ArrayList<>();
+			for (int it : arr)
+				list.add(it);
+			Collections.sort(list);
+			int z = 0;
+			for (int i = 0; i < arr.length; i++)
+				arr[z++] = list.get(i);
+		}
+
+		public void sort(long arr[]) {
+			ArrayList<Long> list = new ArrayList<>();
+			for (long it : arr)
+				list.add(it);
+			Collections.sort(list);
+			int z = 0;
+			for (int i = 0; i < arr.length; i++)
+				arr[z++] = list.get(i);
+		}
+
+		public String read() {
+			while (st == null || !st.hasMoreElements()) {
+				try {
+					st = new StringTokenizer(br.readLine());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			return st.nextToken();
+		}
+
+		public int readInt() {
+			return Integer.parseInt(read());
+		}
+
+		public long readLong() {
+			return Long.parseLong(read());
+		}
+
+		public double readDouble() {
+			return Double.parseDouble(read());
+		}
+
+	}
+
+}
