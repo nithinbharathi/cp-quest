@@ -1,69 +1,104 @@
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.io.*;
 
 /**
- * @submission : Nithin Bharathi 07-Oct-2023
+ * @submission : Nithin Bharathi 23-Sept-2023
  *
  *
  */
 
-public class Problem{
-	static int MOD = 998244353;
-
+public class ProblemB {
+	static long MOD = (long)1e9+7;
+	static boolean vis[];
+	static int dp[][];
+	private static int N = (int)1e5;
+	static int cnt = 0;
 	public static void main(String[] args) throws Exception {
 		StringBuilder sb = new StringBuilder();
 		Template t = new Template();
 		int test = t.readInt();
 		while(test-->0) {
 			int n = t.readInt();
-			int k =t.readInt();
+			int k = t.readInt();
 			char c[] = t.read().toCharArray();
-			int lst = 0,first = n,cnt = 0;
-			for(int i =0;i<n;i++) {
+			int cnt = 0,first = n,last = -1;
+			long ans = 0;
+			for(int i = 0;i<n;i++) {
+				cnt+= c[i]-'0';
+				
 				if(c[i] == '1') {
-					lst = i;
-					first = Math.min(i,first);
-					cnt++;
+					first = Math.min(first,i);
+					last = Math.max(last,i);
 				}
 			}
-			long ans = 0;
-
-			if(n-1 - lst<=k && cnt>0) {
-				cnt--;ans++;k-=(n-1-lst);
-
+			if(last != -1 && n-last-1 <= k) {
+				k-=(n-last-1);cnt--;ans++;
 			}
-			if(first<=k && cnt>0) {
-				cnt--;ans+=10;k-=first;
+			
+			if(first != n && first<=k && cnt>0) {
+				ans+=10;cnt--;
 			}
-			ans+=(cnt*11);
-
-
-			sb.append(ans+"\n");
+					
+			sb.append((ans+(cnt*11))+"\n");			
 		}
-
 		System.out.println(sb);
+
+	}
+	
+	public static int lowerBound(ArrayList<Integer>li,int tar) {
+		int l  =0;
+		int r = li.size()-1;
+		int ind = -1;
+		while(l<=r) {
+			int mid = (l+r)>>1;
+			if(li.get(mid)>=tar) {
+				ind = mid;
+				r = mid-1;
+			}else l = mid+1;
+		}
+		return ind;
+	}
+	
+	public static int upperBound(ArrayList<Integer>li,int tar) {
+		int l  =0;
+		int r = li.size()-1;
+		int ind = -1;
+		while(l<=r) {
+			int mid = (l+r)>>1;
+			if(li.get(mid)<=tar) {
+				ind = mid;
+				l = mid+1;
+			}else r = mid-1;
+		}
+		return ind;
 	}
 
-
 	static class Pair {
-		int x;
-		long y;
-
-		public Pair(int x, long y) {
+		int x,y;
+		public Pair() {
+			
+		}
+		public Pair(int x, int y) {
 			this.x = x;
 			this.y = y;
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(x, y);
 		}
 
 		@Override
 		public boolean equals(Object obj) {
-			if(obj == null)return false;
-
-			Pair o = (Pair)(obj);
-			return this.x == o.x && this.y == o.y;
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Pair other = (Pair) obj;
+			return x == other.x && y == other.y;
 		}
-
 	}
 
 	static class Template {
