@@ -16,42 +16,51 @@ public class ProblemB {
 	public static void main(String[] args) throws Exception {
 		StringBuilder sb = new StringBuilder();
 		Template t = new Template();
-		int n = t.readInt();
-		int a[] = new int[n];
-		int cnt[][] = new int[100][100];
-		for(int i = 0;i<n;i++) {
-			a[i] = t.readInt();
-			int sum = sum(a[i]);
-			cnt[String.valueOf(a[i]).length()][sum]++;
-		}
-		long ans = 0;
-		for(int i = 0;i<n;i++) {
-			int sum = sum(a[i]);
-			String val = String.valueOf(a[i]);
-			int firstHalf  = 0;
-			for(int j = 0;j<val.length();j++) {
-				firstHalf+=val.charAt(j)-'0';
-				int secondHalf = sum-firstHalf;
-				if(firstHalf<secondHalf) {
-					int req = secondHalf-firstHalf;
-					int len = (val.length()-1-j) - (j+1);
-					if(len>=0)ans+=cnt[len][req];
-				}else {
-					int req = firstHalf - secondHalf;
-					int len = (j+1) - (val.length()-1-j);
-					if(len>=0)ans+= cnt[len][req];
-				}
-				//System.out.println(val+" "+ans+" "+firstHalf+" "+secondHalf+" "+cnt[2][4]);
+		//int test = t.readInt();
+		//while(test-->0) {
+			int n = t.readInt();
+			int a[] = new int[n];
+			HashMap<Integer,Integer>map[] = new HashMap[6];
+			for(int i = 0;i<6;i++)map[i] = new HashMap<>();
+			
+			for(int i = 0;i<n;i++) {
+				a[i] = t.readInt();
+				int val = a[i];
+				int len = String.valueOf(val).length();
+				int sum = getSum(a[i]);		
+				map[len].put(sum,map[len].getOrDefault(sum,0)+1);
 			}
-		}
+		
+			long ans = 0;
+			for(int i = 0;i<n;i++) {
+				String val = String.valueOf(a[i]);
+				int sum = getSum(a[i]);
+				int pref = 0;
+				for(int j = 0;j<val.length();j++) {					
+					pref+=(val.charAt(j)-'0');
+					int suf = sum - pref;					
+					int reqSum = pref-suf;
+					int reqLen = (j+1) - (val.length()-j-1);
+					if(suf>pref) {
+						reqSum = suf - pref;
+						reqLen = (val.length()-j-1)-(j+1);
+					}
+					if(reqSum<0 || reqLen<0)continue;
+					ans+= map[reqLen].getOrDefault(reqSum,0);
+				}
+			}
+			sb.append(ans+"\n");
+			
+			
+		//}
+		System.out.println(sb);
 
-		System.out.println(ans);
 	}
-	private static int sum(int n) {
+	private static int getSum(int val) {
 		int sum = 0;
-		while(n>0) {
-			sum+=(n%10);
-			n/=10;
+		while(val>0) {
+			sum+=(val%10);
+			val/=10;
 		}
 		
 		return sum;
@@ -87,12 +96,30 @@ public class ProblemB {
 
 	static class Pair {
 		int x,y;
-
+		public Pair() {
+			
+		}
 		public Pair(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(x, y);
+		}
 
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Pair other = (Pair) obj;
+			return x == other.x && y == other.y;
+		}
 	}
 
 	static class Template {
