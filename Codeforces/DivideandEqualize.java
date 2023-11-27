@@ -1,17 +1,18 @@
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.io.*;
 
 /**
- * @submission : Nithin Bharathi 07-Oct-2023
+ * @submission : Nithin Bharathi 23-Sept-2023
  *
  *
  */
 
-public class Problem{
-	static int MOD = 998244353;
-	static int swaps = 0;
+public class ProblemB {
+	static long MOD = (long)1e9+7;
+	static boolean vis[];
+	static int dp[][];
+	private static int N = (int)1e5;
+	static int cnt = 0;
 	public static void main(String[] args) throws Exception {
 		StringBuilder sb = new StringBuilder();
 		Template t = new Template();
@@ -20,70 +21,82 @@ public class Problem{
 			int n = t.readInt();
 			int a[] = new int[n];
 			for(int i = 0;i<n;i++)a[i] = t.readInt();
-			
 			HashMap<Long,Integer>map = new HashMap<>();
 			for(int i = 0;i<n;i++) {
-				 for(long j = 2;j*j<=a[i];j++) {
-					 int cnt =0;
-					 while(a[i]%j == 0) {
-						 a[i]/=j;cnt++;
-					 }
-					 map.put(j,map.getOrDefault(j,0)+cnt);
-				 }
-				 
-				 if(a[i]>1) map.put((long)a[i],map.getOrDefault((long)a[i],0)+1);
-
+				long val = a[i];
+				for(long j = 2;j*j<=val;j++) {
+					if(val%j == 0) {
+						int cnt = 0;
+						while(val%j == 0) {
+							val/=j;cnt++;
+						}
+						map.put(j,map.getOrDefault(j,0)+cnt);
+					}
+				}
+				if(val>1)map.put(val,map.getOrDefault(val,0)+1);
 			}
 			boolean ok = true;
-			for(int val:map.values())ok &= (val%n == 0);
+			for(int it:map.values())ok&=(it%n == 0);
+			
 			sb.append(ok?"YES\n":"NO\n");
 		}
- 
 		System.out.println(sb);
 	}
-	public static boolean isSorted(int a[]) {
-		boolean ok = true;
-		for(int i =0;i<a.length-1;i++)ok&=(a[i+1]-a[i] == 1);
-		return ok;
+	
+	public static int lowerBound(ArrayList<Integer>li,int tar) {
+		int l  =0;
+		int r = li.size()-1;
+		int ind = -1;
+		while(l<=r) {
+			int mid = (l+r)>>1;
+			if(li.get(mid)>=tar) {
+				ind = mid;
+				r = mid-1;
+			}else l = mid+1;
+		}
+		return ind;
 	}
 	
-	public static void go(int a[], int l, int r) {
-		if(l<r) {
+	public static int upperBound(ArrayList<Integer>li,int tar) {
+		int l  =0;
+		int r = li.size()-1;
+		int ind = -1;
+		while(l<=r) {
 			int mid = (l+r)>>1;
-			go(a,l,mid);
-			go(a,mid+1,r);
-			if(mid+1<a.length && a[mid]>a[mid+1]) {
-				swap(l,mid,mid+1,r,a);
-				swaps++;
-			}	
+			if(li.get(mid)<=tar) {
+				ind = mid;
+				l = mid+1;
+			}else r = mid-1;
 		}
+		return ind;
+	}
 
-	}
-	public static void swap(int l1, int r1, int l2, int r2, int a[]) {
-		int len = r1-l1+1;
-		for(int i =0;i<len;i++) {
-			int t = a[l1+i];
-			a[l1+i] = a[l2+i];
-			a[l2+i] = t;
-		}
-	}
 	static class Pair {
-		int x;
-		long y;
-
-		public Pair(int x, long y) {
+		int x,y;
+		public Pair() {
+			
+		}
+		public Pair(int x, int y) {
 			this.x = x;
 			this.y = y;
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(x, y);
 		}
 
 		@Override
 		public boolean equals(Object obj) {
-			if(obj == null)return false;
-
-			Pair o = (Pair)(obj);
-			return this.x == o.x && this.y == o.y;
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Pair other = (Pair) obj;
+			return x == other.x && y == other.y;
 		}
-
 	}
 
 	static class Template {
