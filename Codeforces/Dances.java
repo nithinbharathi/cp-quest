@@ -17,44 +17,32 @@ public class ProblemB {
 		StringBuilder sb = new StringBuilder();
 		Template t = new Template();
 		int test = t.readInt();
-		boolean vis[] = new boolean[(int)2e5+5];
 		while(test-->0) {
 			int n = t.readInt();
 			int m = t.readInt();
-			int a[] = new int[n-1];
-			TreeMap<Integer,Integer>lookup = new TreeMap<>();
-			lookup.put(1,1);
-			for(int i = 0;i<n-1;i++) {
-				a[i] = t.readInt();
-				lookup.put(a[i],lookup.getOrDefault(a[i],0)+1);
+			TreeMap<Integer,Integer> map = new TreeMap<>();
+			int a[] = new int[n];
+			a[0] = 1;
+			for(int i =1;i<n;i++)a[i]=t.readInt();
+			for(int i = 0;i<n;i++) {
+				int val = t.readInt();
+				map.put(val,map.getOrDefault(val,0)+1);
 			}
-			int b[] = new int[n];
-			for(int i = 0;i<n;i++)b[i] = t.readInt();
-			t.sort(b);
-			
-			int ans = 0;
-			for(int i = n-1;i>=0;i--) {
-				Integer key = lookup.floorKey(b[i]-1);
-				if(key != null) {
-					lookup.put(key,lookup.get(key)-1);
-					if(lookup.get(key) == 0)lookup.remove(key);
-				}else {
-					ans++;
+			long ans = 0;
+			for(int i = 0;i<n;i++) {
+				Integer key = map.ceilingKey(a[i]+1);
+				if(key == null)ans++;
+				else {
+					map.put(key,map.get(key)-1);
+					if(map.get(key) == 0)map.remove(key);
 				}
+				
 			}
 			sb.append(ans+"\n");
+			
 		}
-
+			
 		System.out.println(sb);
-	}
-	private static int sum(int n) {
-		int sum = 0;
-		while(n>0) {
-			sum+=(n%10);
-			n/=10;
-		}
-		
-		return sum;
 	}
 	
 	public static int lowerBound(ArrayList<Integer>li,int tar) {
@@ -87,12 +75,30 @@ public class ProblemB {
 
 	static class Pair {
 		int x,y;
-
+		public Pair() {
+			
+		}
 		public Pair(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(x, y);
+		}
 
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Pair other = (Pair) obj;
+			return x == other.x && y == other.y;
+		}
 	}
 
 	static class Template {
