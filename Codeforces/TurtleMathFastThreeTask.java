@@ -13,18 +13,17 @@ public class Problem {
 		while (test-- > 0) {
 			int n = t.readInt();
 			long sum  = 0;
-			int a[] = new int[n];
+			boolean hv = false;
 			for(int i = 0;i<n;i++) {
-				a[i] = t.readInt();
-				sum += a[i];
+				int a = t.readInt();
+				sum += a;
+				if(a%3 == 1)
+					hv = true;
 			}
 				
 			int res = (int)((3-sum%3)%3);
-			for(int i = 0;i<n;i++) {
-				if((sum-a[i])%3 == 0) {
-					res = Math.min(res, 1);
-				}
-			}
+			if(hv)
+				res = Math.min(res, 1);
 			
 			sb.append(res+"\n");
 
