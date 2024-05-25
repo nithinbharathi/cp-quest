@@ -27,7 +27,7 @@
 					maximumSum = Math.max(sum, maximumSum);
 					total = add(total,a[i]);
 				}
-				
+				maximumSum = (maximumSum%MOD + MOD)%MOD;
 				long powers = 1;				
 				for(int i = 0;i<k;i++) {
 					powers*=2; powers%=MOD;
