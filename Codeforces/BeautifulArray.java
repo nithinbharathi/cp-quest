@@ -41,16 +41,17 @@
 						
 						int N = mp.getValue().size();
 						if(N%2 == 1) {
-							long suf[] = new long[N+1];
+							long suf[] = new long[N];
 							for(int i = N-2;i>=0;i-=2) {
-								suf[i] = (l.get(i+1) - l.get(i))/k + suf[i+2];
+								suf[i] = (l.get(i+1) - l.get(i))/k;
+								if(i+2<N)suf[i]+=suf[i+2];
 							}
-							long cur = suf[1];
+							long cur = Long.MAX_VALUE;
 							long pref = 0;
-							for(int i = 0;i<N-1;i+=2) {
-								pref+= (l.get(i+1) - l.get(i))/k;
-								cur = Math.min(cur, pref+suf[i+3]);
-								
+							for(int i = 0;i<N;i+=2) {
+								cur = Math.min(cur, pref+(i+1<N?suf[i+1]:0));
+								if(i+1<N)
+									pref+= (l.get(i+1) - l.get(i))/k;
 							}
 							ans+=cur;
 						}else {
@@ -58,7 +59,6 @@
 								ans+= (l.get(i+1) - l.get(i))/k;
 							}
 						}
-
 					}
 				}
 				
