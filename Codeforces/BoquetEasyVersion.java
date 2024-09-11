@@ -8,29 +8,34 @@ public class Problem {
 			int test = t.readInt();
 			StringBuilder sb = new StringBuilder();
 			while(test-->0) {
-				int n = t.readInt();
+				int n =t.readInt();
 				long m = t.readLong();
-				
-				ArrayList<Integer>l = new ArrayList<>();	
-				for(int i = 0;i<n;i++) l.add(t.readInt());
-				Collections.sort(l);
+				HashMap<Integer,Integer>map = new HashMap<>();
+				for(int i = 0;i<n;i++) {
+					int val = t.readInt();
+					map.put(val, map.getOrDefault(val, 0)+1);
+				}
 				
 				long ans = 0;
-				long sum = 0;
-				int front = 0;
-				for(int i = 0;i<l.size();i++) {
-					if(sum+l.get(i)<=m && (i == 0 || l.get(i) - l.get(front) <= 1))
-						sum += l.get(i);
-					else {
-						while(front<i && (sum+l.get(i)>m) || l.get(i) - l.get(front)>1) {
-							if(sum>=l.get(front))
-								sum -= l.get(front);
-							front++;
-						}
-						if(sum + l.get(i) <= m)
-							i--;
+				
+				for(Map.Entry<Integer,Integer>mp : map.entrySet()){
+					int k1 = mp.getKey();
+					long cntK1 = mp.getValue();
+					
+					long min1 = Math.min(m/k1, cntK1);
+					ans = Math.max(ans, min1*k1);
+					
+					int k2 = k1+1;
+					long cntK2 = map.getOrDefault(k2, 0);
+					
+					for(int i = 1;i<=cntK1 && cntK2>0;i++) {
+						if(k1*i>m)
+							break;
+						long min2 = Math.min((m-k1*i)/k2, cntK2);
+						long curSum = i*k1 + min2*k2;
+						
+						ans = Math.max(ans, curSum);
 					}				
-					ans = Math.max(sum, ans);
 				}
 				
 				sb.append(ans+"\n");
