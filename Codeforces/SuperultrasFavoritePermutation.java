@@ -1,9 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class Problem {
-
-    
+public class Problem {   
 	public static void main(String[] args) {
 		 Template  t = new Template();
 		 StringBuilder sb = new StringBuilder();	 
@@ -16,24 +14,15 @@ public class Problem {
 				sb.append("-1\n");
 				continue;
 			}
-			int a[] = new int[n];
-			int i = 0;
-			int ind1 = -1, ind2 = -1;
 			for(int num = 1;num<=n;num+=2) {
-				if(num == 5)
-					ind1 = i;
-				a[i++] = num;
+				if(num != 5)
+					sb.append(num+" ");
 			}
+			sb.append(5+" "+4+" ");
 			for(int num = 2;num<=n;num+=2) {
-				if(num == 4)
-					ind2 = i;
-				a[i++] = num;
+				if(num != 4)
+					sb.append(num+" ");
 			}
-			int mid = (n-1)/2;
-			t.swap(a,mid, ind1);
-			t.swap(a, mid+1, ind2);
-			
-			for(int it:a)sb.append(it+" ");
 			sb.append("\n");
 			
 		 }
