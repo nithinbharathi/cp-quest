@@ -12,7 +12,7 @@ public class Problem {
 		while(test-->0) {
 			int n = t.readInt();
 			int d = t.readInt();
-			int min = Math.min(n, 9);
+			int min = Math.min(n, 8);
 			int fact = 1;
 			for(int i = 1;i<=min;i++) {
 				fact*=i;
