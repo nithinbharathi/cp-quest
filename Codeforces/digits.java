@@ -10,8 +10,8 @@ public class Problem {
 		StringBuilder sb = new StringBuilder();
 		
 		while(test-->0) {
-			int n = 10;
-			int d = 9;
+			int n = t.readInt();
+			int d = t.readInt();
 			int min = Math.min(n, 9);
 			int fact = 1;
 			for(int i = 1;i<=min;i++) {
