@@ -11,21 +11,15 @@ public class Problem {
 		
 		while(test-->0) {
 			int n = t.readInt();
-			HashMap<Integer,Integer>map = new HashMap<>();
+			int a[] = new int[n+1];
 			
-			for(int i = 0;i<n;i++) {
+			for(int i = 1;i<=n;i++) {
 				int val = t.readInt();
-				map.put(val, i+1);
+				a[i] = val;
 			}
 			boolean ok = true;
 			for(int i = 1;i<=n;i++) {
-				int pos = map.get(i);
-				boolean cur = false;
-				cur |= pos == i;
-				if(i+1<=n)cur |= pos == i+1;
-				if(i-1>=1) cur |= pos == i-1;
-				
-				ok &= cur;
+				ok &= (a[i] == i || (i+1<=n && a[i+1] == i) || (i-1>=1 && a[i-1] == i));				
 			}
 			
 			sb.append(ok?"YES\n":"NO\n");
